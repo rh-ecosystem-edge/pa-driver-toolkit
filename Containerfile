@@ -1,4 +1,5 @@
-ARG BASEIMAGE="quay.io/centos/centos:stream9"
+#ARG BASEIMAGE="quay.io/centos/centos:stream9"
+ARG BASEIMAGE="registry.access.redhat.com/ubi9/ubi"
 
 FROM ${BASEIMAGE}
 
@@ -6,7 +7,7 @@ ARG VENDOR=''
 LABEL vendor=${VENDOR}
 LABEL org.opencontainers.image.vendor=${VENDOR}
 
-ARG KERNEL_VERSION=''
+ARG KERNEL_VERSION='5.14.0-503.15.1.el9_5'
 ARG ENABLE_RT=''
 
 USER root
