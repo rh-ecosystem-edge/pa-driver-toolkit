@@ -1,5 +1,5 @@
 #ARG BASEIMAGE="quay.io/centos/centos:stream9"
-ARG BASEIMAGE="registry.access.redhat.com/ubi9/ubi:9.5"
+ARG BASEIMAGE="registry.redhat.io/ubi9/ubi:9.5-1736404036"
 
 FROM ${BASEIMAGE}
 
