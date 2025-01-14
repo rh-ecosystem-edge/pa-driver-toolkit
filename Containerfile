@@ -18,6 +18,7 @@ RUN if test -z "${KERNEL_VERSION}" ; then \
     && echo "Kernel version: ${KERNEL_VERSION}" \
     && dnf -y install dnf-plugin-config-manager \
     && dnf config-manager --best --nodocs --setopt=install_weak_deps=False --save \
+    && dnf search kernel-core --showduplicates \
     && dnf -y install \
         kernel-${KERNEL_VERSION} \
         kernel-devel-${KERNEL_VERSION} \
