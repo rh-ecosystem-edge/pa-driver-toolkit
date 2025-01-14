@@ -1,14 +1,10 @@
-ARG BASEIMAGE="registry.redhat.io/ubi9/ubi:9.5"
-
+ARG BASEIMAGE=registry.redhat.io/ubi9/ubi:9.5
 FROM ${BASEIMAGE}
-
 ARG VENDOR=''
 LABEL vendor=${VENDOR}
 LABEL org.opencontainers.image.vendor=${VENDOR}
-
 ARG KERNEL_VERSION='5.14.0-503.21.1.el9_5'
 ARG ENABLE_RT=''
-
 USER root
 
 # kernel packages needed to build drivers / kmods 
