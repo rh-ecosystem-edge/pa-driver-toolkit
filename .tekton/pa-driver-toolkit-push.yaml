@@ -25,7 +25,7 @@ spec:
     value: quay.io/redhat-user-workloads/partners-kmod-accel-tenant/pa-driver-toolkit:{{revision}}
   - name: dockerfile
     value: Containerfile
-  - name: argfile
+  - name: build-args-file
     value: argfile.conf
   pipelineSpec:
     description: |

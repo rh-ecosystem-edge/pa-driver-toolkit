@@ -28,7 +28,7 @@ spec:
     value: 5d
   - name: dockerfile
     value: Containerfile
-  - name: argfile
+  - name: build-args-file
     value: argfile.conf
   pipelineSpec:
     description: |
