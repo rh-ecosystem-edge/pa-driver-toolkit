@@ -1,4 +1,4 @@
-ARG BASEIMAGE="registry.redhat.io/ubi9/ubi:9.5-1736404036"
+ARG BASEIMAGE="registry.redhat.io/ubi9/ubi:9.5"
 
 FROM ${BASEIMAGE}
 
@@ -11,26 +11,15 @@ ARG ENABLE_RT=''
 
 USER root
 
-RUN if test -z "${KERNEL_VERSION}" ; then \
-      echo "The KERNEL_VERSION argument is mandatory. Exiting" ; \
-      exit 1 ; \
-    fi \
-    && echo "Kernel version: ${KERNEL_VERSION}" \
-    && dnf -y install dnf-plugin-config-manager \
-    && dnf config-manager --best --nodocs --setopt=install_weak_deps=False --save \
-    && dnf search kernel-core --showduplicates \
-    && dnf -y install \
-        kernel-${KERNEL_VERSION} \
-        kernel-devel-${KERNEL_VERSION} \
-        kernel-modules-${KERNEL_VERSION} \
-        kernel-modules-extra-${KERNEL_VERSION} \
-    && if [ "${ENABLE_RT}" ] && [ $(arch) == "x86_64" ]; then \
-        dnf -y --enablerepo=rt install \
-            kernel-rt-${KERNEL_VERSION} \
-            kernel-rt-devel-${KERNEL_VERSION} \
-            kernel-rt-modules-${KERNEL_VERSION} \
-            kernel-rt-modules-extra-${KERNEL_VERSION}; \
-    fi \
+# kernel packages needed to build drivers / kmods 
+RUN dnf config-manager --best --setopt=install_weak_deps=False --save
+
+RUN dnf -y install \
+    kernel-devel${KERNEL_VERSION:+-}${KERNEL_VERSION} \
+    kernel-devel-matched${KERNEL_VERSION:+-}${KERNEL_VERSION} \
+    kernel-headers${KERNEL_VERSION:+-}${KERNEL_VERSION} \
+    kernel-modules${KERNEL_VERSION:+-}${KERNEL_VERSION} \
+    kernel-modules-extra${KERNEL_VERSION:+-}${KERNEL_VERSION} \
     && export INSTALLED_KERNEL=$(rpm -q --qf "%{VERSION}-%{RELEASE}.%{ARCH}" kernel-core-${KERNEL_VERSION}) \
     && export GCC_VERSION=$(cat /lib/modules/${INSTALLED_KERNEL}/config | grep -Eo "gcc \(GCC\) ([0-9\.]+)" | grep -Eo "([0-9\.]+)") \
     && dnf -y install \
