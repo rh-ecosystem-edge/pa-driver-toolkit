@@ -22,8 +22,10 @@ spec:
     value: '{{source_url}}'
   - name: revision
     value: '{{revision}}'
+#  - name: output-image
+#    value: quay.io/redhat-user-workloads/partners-kmod-accel-tenant/pa-driver-toolkit:on-pr-{{revision}}
   - name: output-image
-    value: quay.io/redhat-user-workloads/partners-kmod-accel-tenant/pa-driver-toolkit:on-pr-{{revision}}
+    value: quay.io/build_and_sign/pa-driver-toolkit/pa-dtk:on-pr-{{revision}}
   - name: image-expires-after
     value: 5d
   - name: dockerfile
