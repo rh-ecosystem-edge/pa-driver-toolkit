@@ -47,4 +47,6 @@ RUN if [ "${KERNEL_VERSION}" == "" ]; then \
     && echo "{ \"KERNEL_VERSION\": \"${INSTALLED_KERNEL}\" }" > /etc/driver-toolkit-release.json \
     && echo -e "KERNEL_VERSION=\"${INSTALLED_KERNEL}\"" > /etc/driver-toolkit-release.sh
 
+LABEL KERNEL_VERSION=${KERNEL_VERSION}
+
 USER builder
