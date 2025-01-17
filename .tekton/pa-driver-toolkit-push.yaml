@@ -22,7 +22,7 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/build_and_sign/test-dtk/pa-dtk:{{revision}}
+    value: quay.io/build_and_sign/pa-driver-toolkit/pa-dtk:{{revision}}
   - name: dockerfile
     value: Containerfile
   pipelineSpec:
