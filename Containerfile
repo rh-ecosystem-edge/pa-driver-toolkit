@@ -8,9 +8,7 @@ ARG ENABLE_RT=''
 USER root
 
 # kernel packages needed to build drivers / kmods 
-RUN dnf config-manager --best --setopt=install_weak_deps=False --save
-
-RUN dnf -y install \
+RUN microdnf -y install \
     kernel-devel${KERNEL_VERSION:+-}${KERNEL_VERSION} \
     kernel-devel-matched${KERNEL_VERSION:+-}${KERNEL_VERSION} \
     kernel-headers${KERNEL_VERSION:+-}${KERNEL_VERSION} \
@@ -18,7 +16,7 @@ RUN dnf -y install \
     kernel-modules-extra${KERNEL_VERSION:+-}${KERNEL_VERSION} \
     && export INSTALLED_KERNEL=$(rpm -q --qf "%{VERSION}-%{RELEASE}.%{ARCH}" kernel-core-${KERNEL_VERSION}) \
     && export GCC_VERSION=$(cat /lib/modules/${INSTALLED_KERNEL}/config | grep -Eo "gcc \(GCC\) ([0-9\.]+)" | grep -Eo "([0-9\.]+)") \
-    && dnf -y install \
+    && microdnf -y install \
         binutils \
         diffutils \
         elfutils-libelf-devel \
@@ -34,7 +32,7 @@ RUN dnf -y install \
         pinentry \
         rpm-build \
         xz \
-    && dnf -y clean all \
+    && microdnf -y clean all \
     && rm -rf /var/cache/yum \
     && useradd -u 1001 -m -s /bin/bash builder
 
