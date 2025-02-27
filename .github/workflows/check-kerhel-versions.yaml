@@ -1,0 +1,43 @@
+name: Check Kernel Versions
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  
+  workflow_dispatch: 
+
+jobs:
+  check-kernel-versions:
+    runs-on: ubuntu-latest
+    container: registry.redhat.io/ubi9/ubi:9.5 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dnf-utils
+        run: dnf install -y dnf-utils
+
+      - name: Fetch available kernel-devel versions
+        run: dnf search kernel-devel --showduplicates | awk '{print $1}' | sort -u > kernel_versions.txt
+
+      - name: Compare with previous version
+        run: |
+          if [ -f previous_kernel_versions.txt ]; then
+            diff_output=$(diff previous_kernel_versions.txt kernel_versions.txt)
+            if [ -n "$diff_output" ]; then
+              echo "New version found!"
+              echo "$diff_output"
+              echo "CHANGES_DETECTED=true" >> $GITHUB_ENV
+            fi
+          else
+            echo "First run, no previous version to compare."
+          fi
+
+      - name: Update stored versions if changed
+        if: env.CHANGES_DETECTED == 'true'
+        run: |
+          mv kernel_versions.txt previous_kernel_versions.txt
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add previous_kernel_versions.txt
+          git commit -m "Update kernel versions list"
+          git push
